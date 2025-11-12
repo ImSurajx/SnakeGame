@@ -57,4 +57,13 @@ setInterval(()=>{
     snake.unshift(head); // add head at the beginning of the array
     snake.pop(); // remove element from the end of array
     render();
-},400);
+},500);
+
+
+// add eventLister to get the directions
+addEventListener("keydown",(Event)=>{
+    if(event.key === "ArrowUp") directions = "top";
+    else if(event.key === "ArrowRight") directions = "right";   
+    else if(event.key === "ArrowLeft") directions = "left";
+    else if(event.key === "ArrowDown") directions = "bottom";
+})
