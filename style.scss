@@ -18,6 +18,7 @@ body {
 
     // Background colors 
     --bg-primary-color: #0c0c0c;
+    --bg-fill-color : rgb(253, 142, 5);
 
     // Text color 
     --text-primary-color: #f0f0f0;
@@ -87,6 +88,9 @@ section {
             // height: 32px;
             // width: 32px;
             border: 1px solid var(--border-primary-color);
+        }
+        .fill{
+            background-color: var(--bg-fill-color);
         }
     }
 }

@@ -14,7 +14,17 @@ const blockWidth = 80;
 // calculate : the total number of rows & column, according to screen size
 const cols = Math.floor(board.clientWidth / blockWidth);
 const rows = Math.floor(board.clientHeight / blockHeight);
-const blocks = [];
+const blocks = []; 
+
+// start position of snake.
+const snake = [
+    {x : 1, y : 3 },
+    // {x : 1, y : 4}, 
+    // {x : 1, y : 5},
+]
+
+// direction of snake
+let directions = 'right'
 
 // create boxex rows*cols times. like 3x3 = 9 boxes will be created.
 for(let row = 0; row < rows; row++){
@@ -22,9 +32,29 @@ for(let row = 0; row < rows; row++){
     const block = document.createElement('div');
     block.classList.add("block");
     board.appendChild(block);
-    block.innerText = `(${row},${col})`;
+    // block.innerText = `${row},${col}`; 
     blocks[`(${row},${col})`] = block;
     }
 }
 
+// render : snake on board
+function render(){ 
+  snake.forEach(segment=>{
+    blocks[`(${segment.x},${segment.y})`].classList.add("fill"); // select snake
+  });
+}
 
+setInterval(()=>{
+    head = null;
+    if(directions === "left") head = {x : snake[0].x, y : snake[0].y-1}
+    else if(directions === "right") head = {x : snake[0].x, y : snake[0].y+1}
+    else if(directions === "top") head = {x : snake[0].x-1, y : snake[0].y}
+    else if(directions === "bottom") head = {x : snake[0].x+1, y : snake[0].y};
+    // remove fill, so snake will look like moving
+    snake.forEach(segment => {
+        blocks[`(${segment.x},${segment.y})`].classList.remove("fill");
+    })
+    snake.unshift(head); // add head at the beginning of the array
+    snake.pop(); // remove element from the end of array
+    render();
+},400);
