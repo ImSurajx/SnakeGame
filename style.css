@@ -1,3 +1,7 @@
+@charset "UTF-8";
+/* =====================================================
+   GLOBAL DEFAULT SETTINGS
+   ===================================================== */
 * {
   margin: 0;
   padding: 0;
@@ -12,6 +16,9 @@ body {
   width: 100%;
 }
 
+/* =====================================================
+   ROOT VARIABLES → used for consistency across project
+   ===================================================== */
 :root {
   --bg-primary-color: #0c0c0c;
   --bg-fill-color: rgb(253, 142, 5);
@@ -34,11 +41,17 @@ body {
   --border-radius-xxxl: 3.00rem;
 }
 
+/* =====================================================
+   PAGE BACKGROUND + TEXT COLOR
+   ===================================================== */
 html {
   background-color: var(--bg-primary-color);
   color: var(--text-primary-color);
 }
 
+/* =====================================================
+   LAYOUT SETTINGS FOR MAIN & SECTION
+   ===================================================== */
 main,
 section {
   width: 100%;
@@ -51,6 +64,12 @@ section {
   flex-direction: column;
   height: 100%;
   gap: var(--space-md);
+  /* ============================
+     SCORE / TIME INFO SECTION
+     ============================ */
+  /* ============================
+     MAIN GAME BOARD
+     ============================ */
 }
 section .infos {
   width: 100%;
@@ -68,6 +87,9 @@ section .board {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(32px, 1fr));
   grid-template-rows: repeat(auto-fill, minmax(32px, 1fr));
+  /* ----- Each individual grid block ----- */
+  /* ----- Snake body styling ----- */
+  /* ----- Food styling ----- */
 }
 section .board .block {
   border: 1px solid var(--border-primary-color);
@@ -82,6 +104,9 @@ section .board .food {
   border-radius: 50%;
 }
 
+/* =====================================================
+   MODAL (START SCREEN + GAME OVER SCREEN)
+   ===================================================== */
 .modal {
   height: 100vh;
   width: 100%;
@@ -93,6 +118,8 @@ section .board .food {
   display: flex;
   justify-content: center;
   align-items: center;
+  /* ===== START GAME SCREEN ===== */
+  /* ===== GAME OVER SCREEN ===== */
 }
 .modal .start-game {
   display: flex;

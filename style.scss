@@ -1,3 +1,6 @@
+/* =====================================================
+   GLOBAL DEFAULT SETTINGS
+   ===================================================== */
 * {
     margin: 0;
     padding: 0;
@@ -12,19 +15,19 @@ body {
     width: 100%;
 }
 
+/* =====================================================
+   ROOT VARIABLES → used for consistency across project
+   ===================================================== */
 :root {
+    // Background colors
+    --bg-primary-color: #0c0c0c; // main dark theme background
+    --bg-fill-color: rgb(253, 142, 5); // snake color
+    --bg-food-color: rgb(253, 5, 5); // food color
 
-    // we use root variable to make website consistent.
-
-    // Background colors 
-    --bg-primary-color: #0c0c0c;
-    --bg-fill-color: rgb(253, 142, 5);
-    --bg-food-color: rgb(253, 5, 5);
-
-    // Text color 
+    // Text color
     --text-primary-color: #f0f0f0;
 
-    // Spacing variables 
+    // Spacing values (used for padding/margins)
     --space-xs: 0.25rem;
     --space-sm: 0.50rem;
     --space-md: 1.00rem;
@@ -33,10 +36,10 @@ body {
     --space-xxl: 2.50rem;
     --space-xxxl: 3.00rem;
 
-    // Border colors
+    // Border styling
     --border-primary-color: #333;
 
-    // Border radius
+    // Border radius values
     --border-radius-xs: 0.25rem;
     --border-radius-sm: 0.50rem;
     --border-radius-md: 1.00rem;
@@ -46,12 +49,17 @@ body {
     --border-radius-xxxl: 3.00rem;
 }
 
+/* =====================================================
+   PAGE BACKGROUND + TEXT COLOR
+   ===================================================== */
 html {
     background-color: var(--bg-primary-color);
     color: var(--text-primary-color);
-
 }
 
+/* =====================================================
+   LAYOUT SETTINGS FOR MAIN & SECTION
+   ===================================================== */
 main,
 section {
     width: 100%;
@@ -65,6 +73,9 @@ section {
     height: 100%;
     gap: var(--space-md);
 
+    /* ============================
+       SCORE / TIME INFO SECTION
+       ============================ */
     .infos {
         width: 100%;
         display: flex;
@@ -77,27 +88,34 @@ section {
         }
     }
 
+    /* ============================
+       MAIN GAME BOARD
+       ============================ */
     .board {
         border: 1px solid var(--border-primary-color);
-        // border-radius: var(--border-radius-sm);
-        flex-grow: 1; // flex grow: says, take all space that is available inside parent
-        // creating block : 
-        // 20 x 20
-        // total block contain by each screen : depends on screen.
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(32px, 1fr)); // minmax(32px,1fr) help to fix empty space
-        grid-template-rows: repeat(auto-fill, minmax(32px, 1fr)); // minnimum value must be 32px if there is more space then it will be 1fr.
 
+        flex-grow: 1;
+        // board expands to fill leftover space
+
+        display: grid;
+
+        // automatically fill board with grid blocks
+        grid-template-columns: repeat(auto-fill, minmax(32px, 1fr));
+        grid-template-rows: repeat(auto-fill, minmax(32px, 1fr));
+
+        /* ----- Each individual grid block ----- */
         .block {
             border: 1px solid var(--border-primary-color);
-            border-radius: 50%;
+            border-radius: 50%; // makes snake + food round dots
         }
 
+        /* ----- Snake body styling ----- */
         .fill {
             background-color: var(--bg-fill-color);
             border-radius: 50%;
         }
 
+        /* ----- Food styling ----- */
         .food {
             background-color: var(--bg-food-color);
             border-radius: 50%;
@@ -105,17 +123,23 @@ section {
     }
 }
 
+/* =====================================================
+   MODAL (START SCREEN + GAME OVER SCREEN)
+   ===================================================== */
 .modal {
     height: 100vh;
     width: 100%;
     position: fixed;
     top: 0;
-    background: #1111114b;
-    backdrop-filter: blur(4px);
+
+    background: #1111114b; // transparent black overlay
+    backdrop-filter: blur(4px); // blur background effect
+
     display: flex;
     justify-content: center;
     align-items: center;
 
+    /* ===== START GAME SCREEN ===== */
     .start-game {
         display: flex;
         flex-direction: column;
@@ -138,8 +162,9 @@ section {
         }
     }
 
+    /* ===== GAME OVER SCREEN ===== */
     .game-over {
-        display: none;
+        display: none; // hidden until user dies
         flex-direction: column;
         align-items: center;
         gap: var(--space-xl);

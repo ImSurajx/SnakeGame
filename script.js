@@ -1,13 +1,18 @@
-// logic of the Snake Game
-/*
-- 3 frame per second.
-- in each frame snake will move one block forward;
-- if snake eat snake, that will be added to the end of the snake, increase length by one block;
-- in boxes each box has a coordinate, like (0,0), (0,1), (0,2), (1,1), (1,2);
-- we will maintain an array of objects for each block(coordinate);
-*/
+// ===============================
+// SNAKE GAME LOGIC
+// ===============================
 
-// calculate : the total number of rows & column, according to screen size
+// Basic idea of the game:
+// - Snake moves one block every frame.
+// - When snake touches food → score increases + snake grows.
+// - If snake touches wall → game over.
+// - Board is made of small blocks, each has (row, col) coordinate.
+// - We store all blocks inside an object for fast lookup.
+
+
+// ===============================
+// DOM ELEMENTS
+// ===============================
 const board = document.querySelector('.board');
 const startButton = document.querySelector(".btn-start");
 const startGame = document.querySelector(".start-game");
@@ -19,33 +24,55 @@ const scoreElement = document.querySelector("#score");
 const timeElement = document.querySelector("#time");
 
 
-const blockHeight = 32;
-const blockWidth = 32;
+// ===============================
+// BOARD, SNAKE & FOOD VARIABLES
+// ===============================
+const blockHeight = 32;  // each grid block height
+const blockWidth = 32;   // each grid block width
+
+// calculate total number of rows & columns based on available board size
 const cols = Math.floor(board.clientWidth / blockWidth);
 const rows = Math.floor(board.clientHeight / blockHeight);
+
+// Object for storing each block using coordinate keys: (row,col)
 const blocks = [];
+
+// setInterval ID to control game loop (movement)
 let intervalId = null;
+
+// generate initial random food coordinate
 let food = {
     x: Math.floor(Math.random() * rows),
     y: Math.floor(Math.random() * cols),
 }
-let highScore = localStorage.getItem("highScore")||0;
+
+// load highscore from localStorage
+let highScore = localStorage.getItem("highScore") || 0;
 let score = 0;
+
+// time formatted as "minutes-seconds"
 let time = `00-00`;
 let timerIntervalId = null;
+
+// display saved high score
 highScoreElement.innerText = highScore;
 
-// start position of snake.
+
+// ===============================
+// INITIAL SNAKE POSITION
+// ===============================
 let snake = [
-    { x: 1, y: 3 },
-    // {x : 1, y : 4}, 
-    // {x : 1, y : 5},
+    { x: 1, y: 3 },  // starting position of snake head
 ]
 
-// direction of snake
+// default movement direction
 let directions = 'right';
 
-// add eventLister to get the directions
+
+// ===============================
+// KEYBOARD CONTROLS
+// ===============================
+// Using arrow keys to update snake direction
 addEventListener("keydown", (Event) => {
     if (event.key === "ArrowUp") directions = "top";
     else if (event.key === "ArrowRight") directions = "right";
@@ -53,59 +80,82 @@ addEventListener("keydown", (Event) => {
     else if (event.key === "ArrowDown") directions = "bottom";
 });
 
-// create boxex rows*cols times. like 3x3 = 9 boxes will be created.
+
+// ===============================
+// CREATE GRID BLOCKS
+// ===============================
+// Creating grid cells dynamically based on rows and columns
 for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
         const block = document.createElement('div');
-        block.classList.add("block");
+        block.classList.add("block"); // style class
         board.appendChild(block);
-        // block.innerText = `${row},${col}`; 
+        // store each block reference using coordinate key
         blocks[`(${row},${col})`] = block;
     }
 }
 
-// render : snake on board
+
+// ===============================
+// GAME LOOP → RENDER FUNCTION
+// Runs every 500ms using setInterval
+// ===============================
 function render() {
+
+    // ----- draw food -----
     blocks[`(${food.x},${food.y})`].classList.add("food");
-    // remove fill, so snake will look like moving
+
+    // ----- remove old snake blocks so movement appears smooth -----
     snake.forEach(segment => {
         blocks[`(${segment.x},${segment.y})`].classList.remove("fill");
     })
 
+    // ----- calculate new head position based on direction -----
     head = null;
     if (directions === "left") head = { x: snake[0].x, y: snake[0].y - 1 }
     else if (directions === "right") head = { x: snake[0].x, y: snake[0].y + 1 }
     else if (directions === "top") head = { x: snake[0].x - 1, y: snake[0].y }
     else if (directions === "bottom") head = { x: snake[0].x + 1, y: snake[0].y };
 
+    // ----- collision with wall → game over -----
     if (head.x < 0 || head.x >= rows || head.y < 0 || head.y >= cols) {
         modal.style.display = "flex";
-        clearInterval(intervalId);
+        clearInterval(intervalId); // stop movement
         startGame.style.display = "none";
         gameOver.style.display = "flex"
-        return;
-    }; // alret if snake went outside of blocks
+        return; // exit function
+    };
 
-    snake.unshift(head); // add head at the beginning of the array
-    snake.pop(); // remove element from the end of array
+    // ----- add new head to snake & remove last block -----
+    snake.unshift(head);  // moves snake forward
+    snake.pop();          // removes tail (unless growing)
 
+    // ----- draw updated snake position -----
     snake.forEach(segment => {
-        blocks[`(${segment.x},${segment.y})`].classList.add("fill"); // select snake
+        blocks[`(${segment.x},${segment.y})`].classList.add("fill");
     });
 
+    // ----- when snake touches food -----
     if (food.x === head.x && food.y === head.y) {
-        // Remove old food
+
+        // remove old food
         blocks[`(${food.x},${food.y})`].classList.remove("food");
-        // Generate new food coordinates
+
+        // generate new food
         food = {
             x: Math.floor(Math.random() * rows),
             y: Math.floor(Math.random() * cols)
         };
-        // Optionally grow snake (optional)
+
+        // grow snake by duplicating last block
         snake.push(snake[snake.length - 1]);
+
+        // increase score
         score += 10;
         scoreElement.innerText = score;
-        if(score>highScore){
+
+        // update high score
+        if (score > highScore) {
             highScore = score;
             highScoreElement.innerText = highScore;
             localStorage.setItem("highScore", highScore.toString());
@@ -113,27 +163,43 @@ function render() {
     }
 }
 
+
+// ===============================
+// RESTART GAME
+// ===============================
 restartButton.addEventListener("click", restartGame)
 
 function restartGame() {
-    clearInterval(intervalId);
+
+    clearInterval(intervalId);  // stop old movement loop
+
+    // remove food from previous game
     blocks[`(${food.x},${food.y})`].classList.remove("food");
-    // remove fill, so snake will look like moving
+
+    // remove old snake blocks
     snake.forEach(segment => {
         blocks[`(${segment.x},${segment.y})`].classList.remove("fill");
     })
+
+    // hide modal
     modal.style.display = "none";
-    snake = [
-        { x: 1, y: 3 },
-    ]
+
+    // reset snake to initial position
+    snake = [{ x: 1, y: 3 }];
+
+    // generate new food position
     food = {
         x: Math.floor(Math.random() * rows),
         y: Math.floor(Math.random() * cols)
     };
+
+    // restart game loop
     intervalId = setInterval(() => {
         render()
     }, 500);
-    directions = "right"; // or any safe starting direction
+
+    // reset direction, score, time display
+    directions = "right";
     score = 0;
     time = `00-00`
     scoreElement.innerText = score;
@@ -143,25 +209,33 @@ function restartGame() {
 
 
 
+// ===============================
+// START GAME BUTTON HANDLER
+// ===============================
 startButton.addEventListener("click", () => {
-    modal.style.display = "none";
+
+    modal.style.display = "none"; // close start popup
+
+    // start movement loop
     intervalId = setInterval(() => {
         render()
     }, 500);
-    timerIntervalId = setInterval(()=>{
+
+    // start timer (counts every second)
+    timerIntervalId = setInterval(() => {
+
         let [min, sec] = time.split("-").map(Number);
-        if(sec==59){
+
+        if (sec == 59) {
             min += 1;
             sec = 0;
-        } else{
+        } else {
             sec += 1;
         }
+
+        // update time
         time = `${min}-${sec}`;
         timeElement.innerText = time;
-    },1000)
+
+    }, 1000)
 })
-
-
-
-
-
