@@ -80,7 +80,7 @@ let directions = 'right';
 // KEYBOARD CONTROLS
 // ===============================
 // Using arrow keys to update snake direction
-addEventListener("keydown", (Event) => {
+addEventListener("keydown", (event) => {
     if (event.key === "ArrowUp" && directions !== "bottom") directions = "top";
     else if (event.key === "ArrowRight" && directions !== "left") directions = "right";
     else if (event.key === "ArrowLeft" && directions !== "right") directions = "left";
