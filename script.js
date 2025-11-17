@@ -62,6 +62,7 @@ let startX;
 let startY;
 let endX;
 let endY;
+let speed = 400;  // initial speed of snake
 
 
 // ===============================
@@ -186,6 +187,13 @@ function render() {
             highScoreElement.innerText = highScore;
             localStorage.setItem("highScore", highScore.toString());
         }
+
+        if(score >= 20 && score < 50) speed = 350;
+        else if(score >= 50 && score < 100) speed = 300;
+        else if (score >= 100 && score < 150) speed = 250;
+        else if (score >= 150) speed = 200;
+        clearInterval(intervalId);
+        intervalId = setInterval(render, speed)
     }
 }
 
