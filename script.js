@@ -81,10 +81,10 @@ let directions = 'right';
 // ===============================
 // Using arrow keys to update snake direction
 addEventListener("keydown", (Event) => {
-    if (event.key === "ArrowUp") directions = "top";
-    else if (event.key === "ArrowRight") directions = "right";
-    else if (event.key === "ArrowLeft") directions = "left";
-    else if (event.key === "ArrowDown") directions = "bottom";
+    if (event.key === "ArrowUp" && directions !== "bottom") directions = "top";
+    else if (event.key === "ArrowRight" && directions !== "left") directions = "right";
+    else if (event.key === "ArrowLeft" && directions !== "right") directions = "left";
+    else if (event.key === "ArrowDown" && directions !== "top") directions = "bottom";
 });
 
 
