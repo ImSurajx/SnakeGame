@@ -57,6 +57,12 @@ let timerIntervalId = null;
 // display saved high score
 highScoreElement.innerText = highScore;
 
+// initial variable for touch position
+let startX;
+let startY;
+let endX;
+let endY;
+
 
 // ===============================
 // INITIAL SNAKE POSITION
@@ -94,6 +100,17 @@ for (let row = 0; row < rows; row++) {
         blocks[`(${row},${col})`] = block;
     }
 }
+
+// calculate touchStart & touchEnd position
+board.addEventListener("touchstart", (event)=>{
+    startX = event.touches[0].clientX;
+    startY = event.touches[0].clientY;
+});
+
+board.addEventListener("touchend", (event)=>{
+    endX = event.changedTouches[0].clientX;
+    endY = event.changedTouches[0].clientY;
+});
 
 
 // ===============================
