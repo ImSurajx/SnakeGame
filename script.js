@@ -81,10 +81,17 @@ let directions = 'right';
 // ===============================
 // Using arrow keys to update snake direction
 addEventListener("keydown", (event) => {
-    if (event.key === "ArrowUp" && directions !== "bottom") directions = "top";
-    else if (event.key === "ArrowRight" && directions !== "left") directions = "right";
-    else if (event.key === "ArrowLeft" && directions !== "right") directions = "left";
-    else if (event.key === "ArrowDown" && directions !== "top") directions = "bottom";
+    if (snake.length === 1) {
+        if (event.key === "ArrowUp") directions = "top";
+        else if (event.key === "ArrowRight") directions = "right";
+        else if (event.key === "ArrowLeft") directions = "left";
+        else if (event.key === "ArrowDown") directions = "bottom";
+    } else {
+        if (event.key === "ArrowUp" && directions !== "bottom") directions = "top";
+        else if (event.key === "ArrowRight" && directions !== "left") directions = "right";
+        else if (event.key === "ArrowLeft" && directions !== "right") directions = "left";
+        else if (event.key === "ArrowDown" && directions !== "top") directions = "bottom";
+    }
 });
 
 
@@ -103,24 +110,34 @@ for (let row = 0; row < rows; row++) {
 }
 
 // calculate touchStart & touchEnd position
-board.addEventListener("touchstart", (event)=>{
+board.addEventListener("touchstart", (event) => {
     event.preventDefault(); // brower stop default behaviour for particular event
     startX = event.touches[0].clientX;
     startY = event.touches[0].clientY;
 });
 
-board.addEventListener("touchend", (event)=>{
+board.addEventListener("touchend", (event) => {
     endX = event.changedTouches[0].clientX;
     endY = event.changedTouches[0].clientY;
     const dx = endX - startX;
-    const dy = endY - startY; 
-    if(Math.abs(dx) < 15 && Math.abs(dy) < 15) return; // prevent accidental swaps
-    if(Math.abs(dx) > Math.abs(dy)){
-        if( dx > 0 && directions !== "left") directions = "right";
-        else if (dx < 0 && directions !== "right") directions = "left";
+    const dy = endY - startY;
+    if (Math.abs(dx) < 15 && Math.abs(dy) < 15) return; // prevent accidental swaps
+    if (Math.abs(dx) > Math.abs(dy)) {
+        if (snake.length === 1) {
+            if (dx > 0) directions = "right";
+            else if (dx < 0) directions = "left";
+        } else {
+            if (dx > 0 && directions !== "left") directions = "right";
+            else if (dx < 0 && directions !== "right") directions = "left";
+        }
     } else {
-        if( dy > 0 && directions !== "top") directions = "bottom";
-        else if (dy < 0 && directions !== "bottom") directions = "top";
+        if (snake.length === 1) {
+            if (dy > 0) directions = "bottom";
+            else if (dy < 0) directions = "top";
+        } else {
+            if (dy > 0 && directions !== "top") directions = "bottom";
+            else if (dy < 0 && directions !== "bottom") directions = "top";
+        }
     }
 });
 
@@ -190,8 +207,8 @@ function render() {
             localStorage.setItem("highScore", highScore.toString());
         }
 
-        if(score >= 20 && score < 50) speed = 350;
-        else if(score >= 50 && score < 100) speed = 300;
+        if (score >= 20 && score < 50) speed = 350;
+        else if (score >= 50 && score < 100) speed = 300;
         else if (score >= 100 && score < 150) speed = 250;
         else if (score >= 150) speed = 200;
         clearInterval(intervalId);
