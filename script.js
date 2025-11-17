@@ -104,6 +104,7 @@ for (let row = 0; row < rows; row++) {
 
 // calculate touchStart & touchEnd position
 board.addEventListener("touchstart", (event)=>{
+    event.preventDefault(); // brower stop default behaviour for particular event
     startX = event.touches[0].clientX;
     startY = event.touches[0].clientY;
 });
@@ -113,6 +114,7 @@ board.addEventListener("touchend", (event)=>{
     endY = event.changedTouches[0].clientY;
     const dx = endX - startX;
     const dy = endY - startY; 
+    if(Math.abs(dx) < 15 && Math.abs(dy) < 15) return; // prevent accidental swaps
     if(Math.abs(dx) > Math.abs(dy)){
         if( dx > 0 && directions !== "left") directions = "right";
         else if (dx < 0 && directions !== "right") directions = "left";
