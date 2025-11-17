@@ -110,6 +110,15 @@ board.addEventListener("touchstart", (event)=>{
 board.addEventListener("touchend", (event)=>{
     endX = event.changedTouches[0].clientX;
     endY = event.changedTouches[0].clientY;
+    const dx = endX - startX;
+    const dy = endY - startY; 
+    if(Math.abs(dx) > Math.abs(dy)){
+        if( dx > 0 && directions !== "left") directions = "right";
+        else if (dx < 0 && directions !== "right") directions = "left";
+    } else {
+        if( dy > 0 && directions !== "top") directions = "bottom";
+        else if (dy < 0 && directions !== "bottom") directions = "top";
+    }
 });
 
 
