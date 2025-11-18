@@ -86,6 +86,14 @@ section .infos .info {
   border: 1px solid var(--border-primary-color);
   border-radius: var(--border-radius-sm);
 }
+@media (max-width: 650px) {
+  section .infos {
+    flex-direction: column;
+    width: -moz-fit-content;
+    width: fit-content;
+    gap: 5px;
+  }
+}
 section .board {
   touch-action: none;
   border: 1px solid var(--border-primary-color);

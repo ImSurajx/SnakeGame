@@ -92,6 +92,14 @@ section {
         }
     }
 
+    @media (max-width: 650px) {
+        .infos {
+            flex-direction: column;
+            width: fit-content;
+            gap: 5px;
+        }
+    }
+
     /* ============================
        MAIN GAME BOARD
        ============================ */
